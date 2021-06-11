@@ -1,0 +1,72 @@
+version: "3.2"
+services:
+    5g_digital_entity:
+        build: ./5GSDigitalEntity
+        image: 5g_digital_entity:latest
+        network_mode: "host"
+        container_name: 5g_digital_entity
+        restart: always
+        environment:
+            LOG_LEVEL: info
+            PORT: 8080
+            NRF_URL: http://192.168.3.5:7777
+
+    ue_digital_entity:
+        build: ./UEDigitalEntity/backend
+        network_mode: "host"
+        image: ue_digital_entity:latest
+        container_name: ue_digital_entity
+        restart: always
+        depends_on:
+            - 5g_digital_entity
+            - physical_ue_proxy
+        ports:
+            - 8081:8081
+        environment:
+            LOG_LEVEL: info
+            PORT: 8081
+            PHYSICAL_UE_PROXY_ADDRESS: http://localhost:8082
+            DIGITAL_ENTITY_5GS: http://localhost:8080
+            POLLING_STATUS_UPDATE_TIME_IN_MS: 10000
+
+    gnb:
+        build: ./gnb
+        image: gnb:latest
+        container_name: gnb
+        restart: always
+        network_mode: "host"
+        cap_add:
+            - NET_ADMIN
+        devices:
+            - "/dev/net/tun"
+        volumes:
+            - './config:/UERANSIM/config'
+
+    physical_ue_proxy:
+        build: ./UEDigitalEntity/physical_ue_proxy
+        image: physical_ue_proxy:latest
+        container_name: physical_ue_proxy
+        network_mode: "host"
+        restart: always
+        depends_on:
+            - gnb
+        cap_add:
+            - NET_ADMIN
+        devices:
+            - "/dev/net/tun"
+        volumes:
+            - './config:/UERANSIM/config'
+        environment:
+            UERANSIM_BASE_DIR: /UERANSIM
+            UE_CONFIG_FILE: open5gs-ue.yaml
+
+    dashboard:
+        build: ./dashboard
+        image: dashboard:latest
+        container_name: dashboard
+        network_mode: "host"
+        restart: always
+        depends_on:
+            - ue_digital_entity
+        ports:
+           - 5000:5000

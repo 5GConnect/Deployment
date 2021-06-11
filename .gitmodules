@@ -1,0 +1,9 @@
+[submodule "5GSDigitalEntity"]
+	path = 5GSDigitalEntity
+	url = https://github.com/5GConnect/5GSDigitalEntity
+[submodule "dashboard"]
+	path = dashboard
+	url = https://github.com/5GConnect/dashboard
+[submodule "UEDigitalEntity"]
+	path = UEDigitalEntity
+	url = https://github.com/5GConnect/UEDigitalEntity
