@@ -1,0 +1,17 @@
+name: Test
+on:
+  push:
+    branches:
+      - osm
+jobs:
+  test_ran_and_physical_ue_proxy_charm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8' 
+      - name: Install dependencies
+        run: pip install -r ./ran_and_ue_physical_proxy_vnf/charms/native-charm/requirements-dev.txt
+      - name: Test charm
+        run: cd ./ran_and_ue_physical_proxy_vnf/charms/native-charm/ && ./run_tests
