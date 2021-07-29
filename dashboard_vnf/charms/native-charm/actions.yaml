@@ -1,0 +1,8 @@
+startdashboard:
+  description: start 5GS Digital Entity
+    params:
+    discovery-service-url:
+      description: "DISCOVERY SERVICE URL"
+      type: string
+  required:
+    - discovery-service-url

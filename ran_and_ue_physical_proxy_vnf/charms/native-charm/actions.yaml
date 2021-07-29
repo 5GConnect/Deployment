@@ -1,0 +1,46 @@
+configuregnb:
+  description: configure gnb
+  params:
+    ngap-ip:
+      description: "NGAP IP"
+      type: string
+    gtp-ip:
+      description: "GTP IP"
+      type: string
+    amf-ip:
+      description: "AMF IP"
+      type: string
+    amf-port:
+      description: "AMF PORT"
+      type: integer
+      default: 38412
+  required:
+    - ngap-ip
+    - gtp-ip
+    - amf-ip
+
+configureue:
+  description: configure ue
+  params:
+    usim-imsi:
+      description: "USIM IMSI"
+      type: string
+    usim-k:
+      description: "USIM K"
+      type: string
+    usim-opc:
+      description: "USIM OPC"
+      type: string
+  required:
+    - usim-imsi
+    - usim-k
+    - usim-opc
+
+configureueproxy:
+  description: configure ue proxy .env file
+
+startgnb:
+  description: start gnb
+
+startue:
+  description: start gnb

@@ -1,0 +1,16 @@
+start5gsde:
+  description: start 5GS Digital Entity
+    params:
+    nrf-url:
+      description: "NRF URL"
+      type: string
+    port:
+      description: "SERVICE PORT"
+      type: string
+    log-level:
+      description: "LOG LEVEL"
+      type: string
+      default: "info"
+  required:
+    - nrf-url
+    - port

@@ -1,0 +1,7 @@
+language: python
+python:
+  - "3.8"
+install:
+  - pip install -r ./ran_and_ue_physical_proxy_vnf/charms/native-charm/requirements-dev.txt
+script:
+  - cd ./ran_and_ue_physical_proxy_vnf/charms/native-charm/ && ./run_tests
