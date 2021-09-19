@@ -24,19 +24,13 @@ vnfd:
                     charm: native-charm
                     proxy: false 
               initial-config-primitive:
-              - name: start5gsde 
+              - name: startdashboard 
                 execution-environment-ref: env
                 seq: 1
                 parameter:
-                - name: nrf-url
+                - name: discovery-service-url
                   data-type: STRING
-                  default-value: 'http://10.250.0.163:7777'   
-                - name: port
-                  data-type: STRING
-                  default-value: '8080' 
-                - name: log-level
-                  data-type: STRING
-                  default-value: 'info'                                                                                                    
+                  default-value: 'http://:7777'    #TODO: fill with discovery service IP                                                                                                  
   ext-cpd:
     - id: vnf-mgmt-ext
       int-cpd:

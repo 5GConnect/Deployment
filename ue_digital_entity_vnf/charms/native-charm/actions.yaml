@@ -1,5 +1,5 @@
 startuede:
-  description: start 5GS Digital Entity
+  description: start UE Digital Entity
   params:
     physical-ue-proxy-url:
       description: "PHYSICAL UE PROXY URL"

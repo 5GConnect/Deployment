@@ -47,12 +47,10 @@ class NativeCharmCharm(CharmBase):
 
 	def start_dashboard(self, event):
 		all_params = event.params
-		command = f"LOG_LEVEL={all_params['log-level']} PORT={all_params['port']} NRF_URL={all_params['nrf-url']} npm " \
-		          f"run start" if 'log-level' in all_params.keys() else f"PORT={all_params['port']} " \
-		                                                                f"NRF_URL={all_params['nrf-url']} npm run start"
-		self.unit.status = MaintenanceStatus("Starting 5GS Digital Entity service")
-		run_process("5gs_de", command, f"{SRC_PATH}/NodeDiscovery")
-		event.set_results({"message": "5GS Digital Entity start command executed"})
+		command = f"VUE_APP_DISCOVERY_SERVICE={all_params['discovery-service-url']} npm run build:prod && serve -s dist"
+		self.unit.status = MaintenanceStatus("Starting system's dashboard")
+		run_process("dashboard", command, f"{SRC_PATH}/dashboard")
+		event.set_results({"message": "System's dashboard start command executed"})
 
 
 if __name__ == "__main__":

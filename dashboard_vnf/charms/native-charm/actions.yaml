@@ -1,5 +1,5 @@
 startdashboard:
-  description: start 5GS Digital Entity
+  description: start system's dashboard
     params:
     discovery-service-url:
       description: "DISCOVERY SERVICE URL"

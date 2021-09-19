@@ -47,7 +47,20 @@ class NativeCharmCharm(CharmBase):
 		self.unit.status = ActiveStatus()
 
 	def start_uede(self, event):
-		#TODO
+		all_params = event.params
+		command = f"LOG_LEVEL={all_params['log-level']} PORT={all_params['port']} ADDRESS={all_params['address']} " \
+		          f"PHYSICAL_UE_PROXY_ADDRESS={all_params['physical-ue-proxy-url']} " \
+		          f"DIGITAL_ENTITY_5GS={all_params['de-5gs-url']}  SERVICE_REGISTRY={all_params['service-registry-url']}" \
+		          f"POLLING_STATUS_UPDATE_TIME_IN_MS={all_params['polling-time']} " \
+		          f"KEEP_ALIVE_TIME_IN_MS={all_params['keep-alive-time']}  npm run start" \
+			if 'log-level' in all_params.keys() else f"PORT={all_params['port']} ADDRESS={all_params['address']} " \
+			                                         f"PHYSICAL_UE_PROXY_ADDRESS={all_params['physical-ue-proxy-url']} " \
+			                                         f"DIGITAL_ENTITY_5GS={all_params['de-5gs-url']}  SERVICE_REGISTRY={all_params['service-registry-url']}" \
+			                                         f"POLLING_STATUS_UPDATE_TIME_IN_MS={all_params['polling-time']} " \
+			                                         f"KEEP_ALIVE_TIME_IN_MS={all_params['keep-alive-time']} npm run start"
+		self.unit.status = MaintenanceStatus("Starting UE Digital Entity service")
+		run_process("ue_de", command, f"{SRC_PATH}/UEDigitalEntity/backend")
+		event.set_results({"message": "UE Digital Entity start command executed"})
 
 
 if __name__ == "__main__":

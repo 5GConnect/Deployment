@@ -22,7 +22,36 @@ vnfd:
                 - id: env
                   juju:
                     charm: native-charm
-                    proxy: false                                                                               
+                    proxy: false  
+              initial-config-primitive:
+              - name: startuede 
+                execution-environment-ref: env
+                seq: 1
+                parameter:
+                - name: physical-ue-proxy-url 
+                  data-type: STRING
+                  default-value: ''   #TODO fill with ue physical proxy url
+                - name: de-5gs-url
+                  data-type: STRING
+                  default-value: ''   #TODO fill with 5gs de url
+                - name: service-registry-url
+                  data-type: STRING
+                  default-value: ''   #TODO fill with service registry url       
+                - name: polling-time
+                  data-type: INTEGER
+                  default-value: 10000
+                - name: keep-alive-time
+                  data-type: INTEGER
+                  default-value: 10000
+                - name: address
+                  data-type: STRING
+                  default-value: ''   #TODO fill with ue de address            
+                - name: port
+                  data-type: STRING
+                  default-value: '8080'     
+                - name: log-level
+                  data-type: STRING
+                  default-value: 'info'                                                                                                                                     
   ext-cpd:
     - id: vnf-mgmt-ext
       int-cpd:

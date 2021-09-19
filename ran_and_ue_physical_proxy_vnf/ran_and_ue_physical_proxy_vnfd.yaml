@@ -22,10 +22,7 @@ vnfd:
                 - id: env
                   juju:
                     charm: native-charm
-                    proxy: false
-              # config-primitive:
-              # - name: incrementcounter 
-              #   execution-environment-ref: env                     
+                    proxy: false                  
               initial-config-primitive:
               - name: configuregnb 
                 execution-environment-ref: env

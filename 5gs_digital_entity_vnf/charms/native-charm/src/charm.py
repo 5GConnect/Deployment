@@ -52,7 +52,7 @@ class NativeCharmCharm(CharmBase):
 		          f"run start" if 'log-level' in all_params.keys() else f"PORT={all_params['port']} " \
 		                                                                f"NRF_URL={all_params['nrf-url']} npm run start"
 		self.unit.status = MaintenanceStatus("Starting 5GS Digital Entity service")
-		run_process("5gs_de", command, f"{SRC_PATH}/NodeDiscovery")
+		run_process("5gs_de", command, f"{SRC_PATH}/5GSDigitalEntity/backend")
 		event.set_results({"message": "5GS Digital Entity start command executed"})
 
 
