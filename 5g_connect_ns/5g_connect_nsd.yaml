@@ -13,9 +13,21 @@ nsd:
                     virtual-link-profile-id: mgmt_net
                 -   constituent-cpd-id:
                     -   constituent-base-element-id: '1'
-                        constituent-cpd-id: vnf-data-ext
-                    virtual-link-profile-id: data_net
-                vnfd-id: 5gs_digital_entity_vnfd
+                        constituent-cpd-id: vnf-userplane-ext
+                    virtual-link-profile-id: userplane_net
+                -   constituent-cpd-id:
+                    -   constituent-base-element-id: '1'
+                        constituent-cpd-id: vnf-fronthaul-ext
+                    virtual-link-profile-id: fronthaul_net      
+                -   constituent-cpd-id:
+                    -   constituent-base-element-id: '1'
+                        constituent-cpd-id: vnf-digitalentity-ext
+                    virtual-link-profile-id: digitalentity_net          
+                -   constituent-cpd-id:
+                    -   constituent-base-element-id: '1'
+                        constituent-cpd-id: vnf-birex-ext
+                    virtual-link-profile-id: birex_net                                                
+                vnfd-id: 5gs_digital_entity_vnfd      
             -   id: '2'
                 virtual-link-connectivity:
                 -   constituent-cpd-id:
@@ -24,9 +36,13 @@ nsd:
                     virtual-link-profile-id: mgmt_net
                 -   constituent-cpd-id:
                     -   constituent-base-element-id: '2'
-                        constituent-cpd-id: vnf-data-ext
-                    virtual-link-profile-id: data_net
-                vnfd-id: dashboard_vnfd
+                        constituent-cpd-id: vnf-digitalentity-ext
+                    virtual-link-profile-id: digitalentity_net          
+                -   constituent-cpd-id:
+                    -   constituent-base-element-id: '2'
+                        constituent-cpd-id: vnf-birex-ext
+                    virtual-link-profile-id: birex_net                                                
+                vnfd-id: dashboard_vnfd  
             -   id: '3'
                 virtual-link-connectivity:
                 -   constituent-cpd-id:
@@ -35,9 +51,13 @@ nsd:
                     virtual-link-profile-id: mgmt_net
                 -   constituent-cpd-id:
                     -   constituent-base-element-id: '3'
-                        constituent-cpd-id: vnf-data-ext
-                    virtual-link-profile-id: data_net
-                vnfd-id: ran_and_ue_physical_proxy_vnfd
+                        constituent-cpd-id: vnf-fronthaul-ext
+                    virtual-link-profile-id: fronthaul_net      
+                -   constituent-cpd-id:
+                    -   constituent-base-element-id: '3'
+                        constituent-cpd-id: vnf-radioemulated-ext
+                    virtual-link-profile-id: radioemulated_net                                                        
+                vnfd-id: ran_vnfd      
             -   id: '4'
                 virtual-link-connectivity:
                 -   constituent-cpd-id:
@@ -46,9 +66,9 @@ nsd:
                     virtual-link-profile-id: mgmt_net
                 -   constituent-cpd-id:
                     -   constituent-base-element-id: '4'
-                        constituent-cpd-id: vnf-data-ext
-                    virtual-link-profile-id: data_net
-                vnfd-id: service_discovery_vnfd
+                        constituent-cpd-id: vnf-digitalentity-ext
+                    virtual-link-profile-id: digitalentity_net                                                         
+                vnfd-id: service_discovery_vnfd    
             -   id: '5'
                 virtual-link-connectivity:
                 -   constituent-cpd-id:
@@ -57,22 +77,35 @@ nsd:
                     virtual-link-profile-id: mgmt_net
                 -   constituent-cpd-id:
                     -   constituent-base-element-id: '5'
-                        constituent-cpd-id: vnf-data-ext
-                    virtual-link-profile-id: data_net
-                vnfd-id: ue_digital_entity_vnfd                
-        id: simple_native_charm_nsd
-        name: simple_native_charm_nsd
+                        constituent-cpd-id: vnf-digitalentity-ext
+                    virtual-link-profile-id: digitalentity_net    
+                -   constituent-cpd-id:
+                    -   constituent-base-element-id: '5'
+                        constituent-cpd-id: vnf-fronthaul-ext
+                    virtual-link-profile-id: fronthaul_net                            
+                -   constituent-cpd-id:
+                    -   constituent-base-element-id: '5'
+                        constituent-cpd-id: vnf-birex-ext
+                    virtual-link-profile-id: birex_net        
+                vnfd-id: ue_stuff                                                                        
+        id: fiveg_connect_nsd
+        name: fiveg_connect_nsd
         version: '1.0'
         virtual-link-desc:
         -   id: mgmt_net
             mgmt-network: 'true'
+            vim-network-name: mgmt
+        -   id: birex_net
             vim-network-name: private_net_P329
-        -   id: data_net
-            vim-network-name: access
+        -   id: userplane_net
+            vim-network-name: user_plane   
+        -   id: fronthaul_net
+        -   id: radioemulated_net
+        -   id: digitalentity_net                                
         vnfd-id:
         - 5gs_digital_entity_vnfd
         - dashboard_vnfd
-        - ran_and_ue_physical_proxy_vnfd
+        - ran_vnfd
         - service_discovery_vnfd
-        - ue_digital_entity_vnfd
+        - ue_stuff
     
