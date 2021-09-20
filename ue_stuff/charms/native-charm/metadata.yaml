@@ -1,8 +1,8 @@
 name: native-charm
-summary: Native charm used to download and launch 5GSDigitalEntity and O5GS
+summary: Native charm used to install UERANSIM (ue), ue_physical_proxy and UE digital entity modules
 maintainer: Daniele Rossi <daniele.rossi27@unibo.it>
 description: |
-  Native charm used to download and launch 5GSDigitalEntity and O5GS
+   Native charm used to install UERANSIM (ue), ue_physical_proxy and UE digital entity modules
 tags:
   # tags list: https://jujucharms.com/docs/stable/authors-charm-metadata
   - network

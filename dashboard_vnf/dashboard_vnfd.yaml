@@ -30,15 +30,19 @@ vnfd:
                 parameter:
                 - name: discovery-service-url
                   data-type: STRING
-                  default-value: 'http://:7777'    #TODO: fill with discovery service IP                                                                                                  
+                  default-value: 'http://192.168.3.5:8085'                                                                                                 
   ext-cpd:
     - id: vnf-mgmt-ext
       int-cpd:
         cpd: eth0-int
         vdu-id: default_vdu
-    - id: vnf-data-ext
+    - id: vnf-birex-ext
       int-cpd:
         cpd: eth1-int
+        vdu-id: default_vdu
+    - id: vnf-digitalentity-ext
+      int-cpd:
+        cpd: eth2-int
         vdu-id: default_vdu
   id: dashboard_vnfd
   mgmt-cp: vnf-mgmt-ext
@@ -62,6 +66,11 @@ vnfd:
             - name: eth1
               virtual-interface:
                 type: PARAVIRT
+        - id: eth2-int
+          virtual-network-interface-requirement:
+            - name: eth2
+              virtual-interface:
+                type: PARAVIRT                
       name: default_vdu
       supplemental-boot-data:
         boot-data-drive: true

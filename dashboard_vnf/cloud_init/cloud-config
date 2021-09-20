@@ -12,3 +12,6 @@ network:
     ens4:
       dhcp4: true
       set-name: ens4
+    ens5:
+      dhcp4: true
+      set-name: ens5      

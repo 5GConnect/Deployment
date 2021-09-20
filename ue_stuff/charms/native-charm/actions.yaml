@@ -1,0 +1,62 @@
+configureue:
+  description: configure ue
+  params:
+    usim-imsi:
+      description: "USIM IMSI"
+      type: string
+    usim-k:
+      description: "USIM K"
+      type: string
+    usim-opc:
+      description: "USIM OPC"
+      type: string
+  required:
+    - usim-imsi
+    - usim-k
+    - usim-opc
+
+configureueproxy:
+  description: configure ue proxy .env file
+
+startue:
+  description: start ue
+
+startuede:
+  description: start UE Digital Entity
+  params:
+    physical-ue-proxy-url:
+      description: "PHYSICAL UE PROXY URL"
+      type: string
+    de-5gs-url:
+      description: "5GS ENTITY URL"
+      type: string 
+    service-registry-url:
+      description: "SERVICE REGISTRY URL"
+      type: string      
+    polling-time: 
+      description: "POLLING TIME"
+      type: integer  
+    keep-alive-time: 
+      description: "KEEP-ALIVE TIME"
+      type: integer  
+    address: 
+      description: "UE DIGITAL ENTITY ADDRESS"
+      type: string         
+    port:
+      description: "SERVICE PORT"
+      type: string
+    log-level:
+      description: "LOG LEVEL"
+      type: string
+      default: "info"
+  required:
+    - physical-ue-proxy-url
+    - port
+    - de-5gs-url
+    - service-registry-url
+    - polling-time
+    - keep-alive-time
+    - address
+
+startdashjs:
+  description: Start Dash.js player service    

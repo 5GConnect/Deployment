@@ -31,6 +31,7 @@ class NativeCharmCharm(CharmBase):
 		# Listen to charm events
 		self.framework.observe(self.on.install, self.on_install)
 		self.framework.observe(self.on.start, self.on_start)
+		self.framework.observe(self.on.startservicediscovery_action, self.start_service_discovery)
 
 	def on_install(self, event):
 		self.unit.status = MaintenanceStatus("Installing apt packages")
@@ -42,9 +43,18 @@ class NativeCharmCharm(CharmBase):
 		self.unit.status = ActiveStatus()
 
 	def on_start(self, event):
-		self.unit.status = MaintenanceStatus("Starting Node Discovery service")
-		run_process("discovery", "npm run start", f"{SRC_PATH}/NodeDiscovery")
 		self.unit.status = ActiveStatus()
+	
+	def start_service_discovery(self, event):
+		all_params = event.params
+		command = f"LOG_LEVEL={all_params['log-level']} PORT={all_params['port']} " \
+			      f"KEEP_ALIVE_TIME_IN_MS={all_params['keep-alive-time']}  npm run start" \
+			if 'log-level' in all_params.keys() else f"PORT={all_params['port']} " \
+			                                         f"KEEP_ALIVE_TIME_IN_MS={all_params['keep-alive-time']} npm run start"
+		self.unit.status = MaintenanceStatus("Starting Node Discovery service")
+		run_process("discovery", command, f"{SRC_PATH}/NodeDiscovery")
+		self.unit.status = ActiveStatus()
+
 
 
 if __name__ == "__main__":
