@@ -9,7 +9,7 @@ from ops.model import ActiveStatus, MaintenanceStatus
 from utils import (
 	install_apt,
 	git_clone,
-	run_process
+	run_process, shell
 )
 
 logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ APT_REQUIREMENTS = [
 ]
 
 DASHBOARD_REPO = "https://github.com/5GConnect/dashboard.git"
-SRC_PATH = "/home/ubuntu"
+SRC_PATH = "/home/ubuntu/dashboard"
 
 
 class NativeCharmCharm(CharmBase):
@@ -40,6 +40,7 @@ class NativeCharmCharm(CharmBase):
 			os.makedirs(SRC_PATH)
 		self.unit.status = MaintenanceStatus("Cloning Dashboard repo...")
 		git_clone(DASHBOARD_REPO, output_folder=SRC_PATH, branch="develop")
+		shell(f"cd {SRC_PATH} && npm install")
 		self.unit.status = ActiveStatus()
 
 	def on_start(self, _):
@@ -49,7 +50,7 @@ class NativeCharmCharm(CharmBase):
 		all_params = event.params
 		command = f"VUE_APP_DISCOVERY_SERVICE={all_params['discovery-service-url']} npm run build:prod && serve -s dist"
 		self.unit.status = MaintenanceStatus("Starting system's dashboard")
-		run_process("dashboard", command, f"{SRC_PATH}/dashboard")
+		run_process("dashboard", command, SRC_PATH)
 		event.set_results({"message": "System's dashboard start command executed"})
 
 

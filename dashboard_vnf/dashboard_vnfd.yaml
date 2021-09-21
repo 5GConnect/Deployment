@@ -30,7 +30,7 @@ vnfd:
                 parameter:
                 - name: discovery-service-url
                   data-type: STRING
-                  default-value: 'http://192.168.3.5:8085'                                                                                                 
+                  value: 'http://192.168.3.5:8085'
   ext-cpd:
     - id: vnf-mgmt-ext
       int-cpd:

@@ -9,7 +9,7 @@ from ops.model import ActiveStatus, MaintenanceStatus
 from utils import (
 	install_apt,
 	git_clone,
-	run_process
+	run_process, shell
 )
 
 logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ APT_REQUIREMENTS = [
 ]
 
 FIVEGS_DIGITAL_ENTITY_REPO = "https://github.com/5GConnect/5GSDigitalEntity.git"
-SRC_PATH = "/home/ubuntu"
+SRC_PATH = "/home/ubuntu/5GSDigitalEntity"
 
 
 class NativeCharmCharm(CharmBase):
@@ -31,7 +31,7 @@ class NativeCharmCharm(CharmBase):
 		# Listen to charm events
 		self.framework.observe(self.on.install, self.on_install)
 		self.framework.observe(self.on.start, self.on_start)
-		
+
 		self.framework.observe(self.on.start5gsde_action, self.start_5gsde)
 
 	def on_install(self, _):
@@ -41,6 +41,7 @@ class NativeCharmCharm(CharmBase):
 			os.makedirs(SRC_PATH)
 		self.unit.status = MaintenanceStatus("Cloning 5GS Digital Entity repo...")
 		git_clone(FIVEGS_DIGITAL_ENTITY_REPO, output_folder=SRC_PATH, branch="develop")
+		shell(f"cd {SRC_PATH}/backend && npm install")
 		self.unit.status = ActiveStatus()
 
 	def on_start(self, _):
@@ -52,7 +53,7 @@ class NativeCharmCharm(CharmBase):
 		          f"run start" if 'log-level' in all_params.keys() else f"PORT={all_params['port']} " \
 		                                                                f"NRF_URL={all_params['nrf-url']} npm run start"
 		self.unit.status = MaintenanceStatus("Starting 5GS Digital Entity service")
-		run_process("5gs_de", command, f"{SRC_PATH}/5GSDigitalEntity/backend")
+		run_process("5gs_de", command, f"{SRC_PATH}/backend")
 		event.set_results({"message": "5GS Digital Entity start command executed"})
 
 

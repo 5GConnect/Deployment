@@ -1,6 +1,6 @@
 start5gsde:
   description: start 5GS Digital Entity
-    params:
+  params:
     nrf-url:
       description: "NRF URL"
       type: string
@@ -12,5 +12,5 @@ start5gsde:
       type: string
       default: "info"
   required:
-    - nrf-url
-    - port
+      - nrf-url
+      - port

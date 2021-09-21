@@ -30,13 +30,13 @@ vnfd:
                 parameter:
                 - name: nrf-url
                   data-type: STRING
-                  default-value: 'http://127.0.0.10:7777'   
+                  value: 'http://127.0.0.10:7777'
                 - name: port
                   data-type: STRING
-                  default-value: '8080' 
+                  value: '8080'
                 - name: log-level
                   data-type: STRING
-                  default-value: 'info'                                                                                                    
+                  value: 'info'
   ext-cpd:
     - id: vnf-mgmt-ext
       int-cpd:

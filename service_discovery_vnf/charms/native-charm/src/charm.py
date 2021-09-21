@@ -9,7 +9,7 @@ from ops.model import ActiveStatus, MaintenanceStatus
 from utils import (
 	install_apt,
 	git_clone,
-	run_process
+	run_process, shell
 )
 
 logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ APT_REQUIREMENTS = [
 ]
 
 NODE_DISCOVERY_REPO = "https://github.com/5GConnect/NodeDiscovery.git"
-SRC_PATH = "/home/ubuntu"
+SRC_PATH = "/home/ubuntu/NodeDiscovery"
 
 
 class NativeCharmCharm(CharmBase):
@@ -40,6 +40,7 @@ class NativeCharmCharm(CharmBase):
 			os.makedirs(SRC_PATH)
 		self.unit.status = MaintenanceStatus("Cloning Node Discovery repo...")
 		git_clone(NODE_DISCOVERY_REPO, output_folder=SRC_PATH, branch="develop")
+		shell(f"cd {SRC_PATH} && npm install")
 		self.unit.status = ActiveStatus()
 
 	def on_start(self, event):
@@ -52,7 +53,7 @@ class NativeCharmCharm(CharmBase):
 			if 'log-level' in all_params.keys() else f"PORT={all_params['port']} " \
 			                                         f"KEEP_ALIVE_TIME_IN_MS={all_params['keep-alive-time']} npm run start"
 		self.unit.status = MaintenanceStatus("Starting Node Discovery service")
-		run_process("discovery", command, f"{SRC_PATH}/NodeDiscovery")
+		run_process("discovery", command, SRC_PATH)
 		self.unit.status = ActiveStatus()
 
 

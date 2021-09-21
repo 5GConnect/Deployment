@@ -30,16 +30,16 @@ vnfd:
                 parameter:
                 - name: ngap-ip
                   data-type: STRING
-                  default-value: '10.250.0.4'   
+                  value: '10.250.0.4'
                 - name: gtp-ip
                   data-type: STRING
-                  default-value: '10.250.0.4' 
+                  value: '10.250.0.4'
                 - name: link-ip
                   data-type: STRING
-                  default-value: '192.168.4.3'                   
+                  value: '192.168.4.3'
                 - name: amf-ip
                   data-type: STRING
-                  default-value: '10.250.0.3'                                                                   
+                  value: '10.250.0.3'
               - name: startgnb 
                 execution-environment-ref: env
                 seq: 2

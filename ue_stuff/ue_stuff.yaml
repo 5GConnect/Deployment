@@ -30,13 +30,13 @@ vnfd:
                 parameter:
                 - name: usim-imsi
                   data-type: STRING
-                  default-value: 'imsi-901700000000001'   
+                  value: 'imsi-901700000000001'
                 - name: usim-k
                   data-type: STRING
-                  default-value: '465B5CE8B199B49FAA5F0A2EE238A6BC' 
+                  value: '465B5CE8B199B49FAA5F0A2EE238A6BC'
                 - name: usim-opc
                   data-type: STRING
-                  default-value: 'E8ED289DEBA952E4283B54E88E6183CA'                    
+                  value: 'E8ED289DEBA952E4283B54E88E6183CA'
               - name: configureueproxy
                 execution-environment-ref: env
                 seq: 2
@@ -49,28 +49,28 @@ vnfd:
                 parameter:
                 - name: physical-ue-proxy-url 
                   data-type: STRING
-                  default-value: '127.0.0.1'
+                  value: '127.0.0.1'
                 - name: de-5gs-url
                   data-type: STRING
-                  default-value: '192.168.3.3'
+                  value: '192.168.3.3'
                 - name: service-registry-url
                   data-type: STRING
-                  default-value: '192.168.3.5'  
+                  value: '192.168.3.5'
                 - name: polling-time
                   data-type: INTEGER
-                  default-value: 10000
+                  value: 10000
                 - name: keep-alive-time
                   data-type: INTEGER
-                  default-value: 10000
+                  value: 10000
                 - name: address
                   data-type: STRING
-                  default-value: '192.168.3.4'       
+                  value: '192.168.3.4'
                 - name: port
                   data-type: STRING
-                  default-value: '8080'     
+                  value: '8080'
                 - name: log-level
                   data-type: STRING
-                  default-value: 'info'  
+                  value: 'info'
               - name: startdashjs 
                 execution-environment-ref: env
                 seq: 5                

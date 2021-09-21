@@ -1,8 +1,8 @@
 startdashboard:
   description: start system's dashboard
-    params:
-    discovery-service-url:
-      description: "DISCOVERY SERVICE URL"
-      type: string
+  params:
+      discovery-service-url:
+        description: "DISCOVERY SERVICE URL"
+        type: string
   required:
     - discovery-service-url

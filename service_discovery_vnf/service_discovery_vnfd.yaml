@@ -30,13 +30,13 @@ vnfd:
                 parameter:
                 - name: keep-alive-time
                   data-type: INTEGER
-                  default-value: 15000       
+                  value: 15000
                 - name: port
                   data-type: STRING
-                  default-value: '8085'     
+                  value: '8085'
                 - name: log-level
                   data-type: STRING
-                  default-value: 'info'                                                                                        
+                  value: 'info'
   ext-cpd:
     - id: vnf-mgmt-ext
       int-cpd:

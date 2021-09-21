@@ -37,7 +37,10 @@ APT_REQUIREMENTS = [
 DASHJS_REPO = "https://github.com/5GConnect/dash.js"
 UE_DIGITAL_ENTITY_REPO = UE_PHYSICAL_PROXY_REPO = "https://github.com/5GConnect/UEDigitalEntity.git"
 UERANSIM_REPO = "https://github.com/DendoD96/UERANSIM.git"
-SRC_PATH = "/home/ubuntu"
+SRC_PATH_DASH = "/home/ubuntu/dash.js"
+SRC_PATH_UERANSIM = "/home/ubuntu/UERANSIM"
+SRC_PATH_DE = "/home/ubuntu/UEDigitalEntity"
+SRC_PATH_PHYSICAL_PROXY = "/home/ubuntu/PhysicalProxy"
 
 
 class NativeCharmCharm(CharmBase):
@@ -60,19 +63,27 @@ class NativeCharmCharm(CharmBase):
 		self.unit.status = MaintenanceStatus("Installing apt packages")
 		install_apt(packages=APT_REQUIREMENTS, update=True)
 		shell("sudo snap install cmake --classic")
-		if not os.path.exists(SRC_PATH):
-			os.makedirs(SRC_PATH)
+		if not os.path.exists(SRC_PATH_DASH):
+			os.makedirs(SRC_PATH_DASH)
+		if not os.path.exists(SRC_PATH_UERANSIM):
+			os.makedirs(SRC_PATH_UERANSIM)
+		if not os.path.exists(SRC_PATH_DE):
+			os.makedirs(SRC_PATH_DE)
+		if not os.path.exists(SRC_PATH_PHYSICAL_PROXY):
+			os.makedirs(SRC_PATH_PHYSICAL_PROXY)
 		self.unit.status = MaintenanceStatus("Cloning UERANSIM repo...")
-		git_clone(UERANSIM_REPO, output_folder=SRC_PATH, branch="paper_demo")
+		git_clone(UERANSIM_REPO, output_folder=SRC_PATH_UERANSIM, branch="paper_demo")
 		self.unit.status = MaintenanceStatus("Buildig UERANSIM...")
-		shell(f"cd {SRC_PATH}/UERANSIM && make")
+		shell(f"cd {SRC_PATH_UERANSIM} && make")
 		self.unit.status = MaintenanceStatus("Cloning UEPhysicalProxy repo...")
-		git_clone(UE_PHYSICAL_PROXY_REPO, output_folder=SRC_PATH, branch="develop")
-		shell(f"cd {SRC_PATH}/UEDigitalEntity/physical_ue_proxy && pip install -r requirements.txt")
+		git_clone(UE_PHYSICAL_PROXY_REPO, output_folder=SRC_PATH_PHYSICAL_PROXY, branch="develop")
+		shell(f"cd {SRC_PATH_PHYSICAL_PROXY}/physical_ue_proxy && pip install -r requirements.txt")
 		self.unit.status = MaintenanceStatus("Cloning UE Digital Entity repo...")
-		git_clone(UE_DIGITAL_ENTITY_REPO, output_folder=SRC_PATH, branch="develop")
+		git_clone(UE_DIGITAL_ENTITY_REPO, output_folder=SRC_PATH_DE, branch="develop")
+		shell(f"cd {SRC_PATH_DE}/backend && npm install")
 		self.unit.status = MaintenanceStatus("Cloning Dash js repo...")
-		git_clone(DASHJS_REPO, output_folder=SRC_PATH, branch="development")
+		git_clone(DASHJS_REPO, output_folder=SRC_PATH_DASH, branch="development")
+		shell(f"cd {SRC_PATH_DASH} && npm install")
 		self.unit.status = ActiveStatus()
 
 	def on_start(self, _):
@@ -82,7 +93,7 @@ class NativeCharmCharm(CharmBase):
 		try:
 			filepath = f"{pathlib.Path(__file__).parent.parent.absolute()}/tests/mocked_config_files/open5gs-ue.yaml" \
 				if self.config['testing'] \
-				else f"{SRC_PATH}/UERANSIM/config/open5gs-ue.yaml"
+				else f"{SRC_PATH_UERANSIM}/config/open5gs-ue.yaml"
 			edit_ue_configuration_file(filepath, event.params)
 			event.set_results({"message": "UE configuration file edited"})
 		except Exception as e:
@@ -92,14 +103,14 @@ class NativeCharmCharm(CharmBase):
 		try:
 			filepath = f"{pathlib.Path(__file__).parent.parent.absolute()}/tests/mocked_config_files/.env" \
 				if self.config['testing'] \
-				else f"{SRC_PATH}/UEDigitalEntity/physical_ue_proxy/server/.env"
-			edit_env_file(filepath, {'UERANSIM_BASE_DIR': f'{SRC_PATH}/UERANSIM', 'UE_CONFIG_FILE': 'open5gs-ue.yaml'})
+				else f"{SRC_PATH_PHYSICAL_PROXY}/physical_ue_proxy/server/.env"
+			edit_env_file(filepath, {'UERANSIM_BASE_DIR': SRC_PATH_UERANSIM, 'UE_CONFIG_FILE': 'open5gs-ue.yaml'})
 			event.set_results({"message": "UE proxy env file edited"})
 		except Exception as e:
 			event.fail(message=f'Error: {str(e)}')
 
 	def start_ue(self, event):
-		run_process('ue', 'python3 -m server', f"{SRC_PATH}/UEDigitalEntity/physical_ue_proxy")
+		run_process('ue', 'python3 -m server', f"{SRC_PATH_PHYSICAL_PROXY}/physical_ue_proxy")
 		event.set_results({"message": "UE start command executed"})
 
 	def start_uede(self, event):
@@ -115,11 +126,11 @@ class NativeCharmCharm(CharmBase):
 			                                         f"POLLING_STATUS_UPDATE_TIME_IN_MS={all_params['polling-time']} " \
 			                                         f"KEEP_ALIVE_TIME_IN_MS={all_params['keep-alive-time']} npm run start"
 		self.unit.status = MaintenanceStatus("Starting UE Digital Entity service")
-		run_process("ue_de", command, f"{SRC_PATH}/UEDigitalEntity/backend")
+		run_process("ue_de", command, f"{SRC_PATH_DE}/backend")
 		event.set_results({"message": "UE Digital Entity start command executed"})		
 
 	def start_dashjs(self, event):
-		run_process('dashjs', 'npm run start', f"{SRC_PATH}/dash.js")
+		run_process('dashjs', 'npm run start', SRC_PATH_DASH)
 		event.set_results({"message": "Dashjs start command executed"})
 
 if __name__ == "__main__":

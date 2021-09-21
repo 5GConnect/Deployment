@@ -42,3 +42,7 @@ def run_process(process_name: str, cmd: str, directory: str):
 	subprocess.run(f"cd {directory}", shell=True)
 	process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
 	processes[process_name] = process
+
+
+def shell(command: str) -> NoReturn:
+	subprocess.run(command, shell=True).check_returncode()
