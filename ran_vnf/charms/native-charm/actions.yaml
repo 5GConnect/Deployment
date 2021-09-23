@@ -1,26 +1,26 @@
 configuregnb:
   description: configure gnb
   params:
-    ngap-ip:
+    ngapip:
       description: "NGAP IP"
       type: string
-    gtp-ip:
+    gtpip:
       description: "GTP IP"
       type: string
-    link-ip:
+    linkip:
       description: "LINK IP"
       type: string      
-    amf-ip:
+    amfip:
       description: "AMF IP"
       type: string
-    amf-port:
+    amfport:
       description: "AMF PORT"
       type: integer
       default: 38412
   required:
-    - ngap-ip
-    - gtp-ip
-    - link-ip
-    - amf-ip
+    - ngapip
+    - gtpip
+    - linkip
+    - amfip
 startgnb:
   description: start gnb

@@ -1,16 +1,16 @@
 startservicediscovery:
   description: start Service Discovery
   params:
-    keep-alive-time: 
+    keepalivetime:
       description: "KEEP-ALIVE TIME"
       type: integer          
     port:
       description: "SERVICE PORT"
       type: string
-    log-level:
+    loglevel:
       description: "LOG LEVEL"
       type: string
       default: "info"
   required:
     - port
-    - keep-alive-time
+    - keepalivetime

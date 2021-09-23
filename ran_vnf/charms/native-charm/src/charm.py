@@ -2,7 +2,6 @@
 
 import logging
 import os
-import pathlib
 
 from ops.charm import CharmBase
 from ops.model import (
@@ -16,9 +15,8 @@ from utils import (
 	git_clone,
 	shell,
 	edit_gnb_configuration_file,
-	edit_ue_configuration_file,
-	edit_env_file,
-	run_process
+	configure_service,
+	systemctl
 )
 
 logger = logging.getLogger(__name__)
@@ -34,6 +32,9 @@ APT_REQUIREMENTS = [
 	"iproute2"
 ]
 
+SERVICE_NAME = "gnb"
+GNB_SERVICE_PATH = f"/etc/systemd/system/{SERVICE_NAME}.service"
+GNB_SERVICE_TEMPLATE = f"./templates/{SERVICE_NAME}.service"
 UERANSIM_REPO = "https://github.com/DendoD96/UERANSIM.git"
 SRC_PATH_UERANSIM = "/home/ubuntu/UERANSIM"
 
@@ -52,7 +53,7 @@ class NativeCharmCharm(CharmBase):
 
 	def on_install(self, _):
 		self.unit.status = MaintenanceStatus("Installing apt packages")
-		install_apt(packages=APT_REQUIREMENTS, update=True)
+		install_apt(packages=APT_REQUIREMENTS)
 		shell("sudo snap install cmake --classic")
 		if not os.path.exists(SRC_PATH_UERANSIM):
 			os.makedirs(SRC_PATH_UERANSIM)
@@ -67,17 +68,23 @@ class NativeCharmCharm(CharmBase):
 
 	def configure_gnb(self, event):
 		try:
-			filepath = f"{pathlib.Path(__file__).parent.parent.absolute()}/tests/mocked_config_files/open5gs-gnb.yaml" \
-				if self.config['testing'] \
-				else f"{SRC_PATH_UERANSIM}/config/open5gs-gnb.yaml"
+			filepath = f"{SRC_PATH_UERANSIM}/config/open5gs-gnb.yaml"
 			edit_gnb_configuration_file(filepath, event.params)
+			self.unit.status = ActiveStatus()
 			event.set_results({"message": "gNB configuration file edited"})
 		except Exception as e:
 			event.fail(message=f'Error: {str(e)}')
 
 	def start_gnb(self, event):
-		run_process('gnb', './nr-gnb -c ../config/open5gs-gnb.yaml', f"{SRC_PATH_UERANSIM}/build")
+		self.unit.status = MaintenanceStatus("Generating gNB service...")
+		configure_service(command=f'{SRC_PATH_UERANSIM}/build/nr-gnb -c {SRC_PATH_UERANSIM}/config/open5gs-gnb.yaml',
+		                  service_template=GNB_SERVICE_TEMPLATE,
+		                  service_path=GNB_SERVICE_PATH)
+		self.unit.status = MaintenanceStatus("Starting gNB")
+		systemctl(action="start", service_name=SERVICE_NAME)
+		self.unit.status = ActiveStatus()
 		event.set_results({"message": "gNB start command executed"})
+
 
 if __name__ == "__main__":
 	main(NativeCharmCharm)

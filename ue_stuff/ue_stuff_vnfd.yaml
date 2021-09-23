@@ -28,15 +28,18 @@ vnfd:
                 execution-environment-ref: env
                 seq: 1
                 parameter:
-                - name: usim-imsi
+                - name: usimimsi
                   data-type: STRING
                   value: 'imsi-901700000000001'
-                - name: usim-k
+                - name: usimk
                   data-type: STRING
                   value: '465B5CE8B199B49FAA5F0A2EE238A6BC'
-                - name: usim-opc
+                - name: usimopc
                   data-type: STRING
                   value: 'E8ED289DEBA952E4283B54E88E6183CA'
+                - name: gnbaddress
+                  data-type: STRING
+                  value: '192.168.4.3'
               - name: configureueproxy
                 execution-environment-ref: env
                 seq: 2
@@ -47,19 +50,19 @@ vnfd:
                 execution-environment-ref: env
                 seq: 4
                 parameter:
-                - name: physical-ue-proxy-url 
+                - name: physicalueproxyurl
                   data-type: STRING
                   value: '127.0.0.1'
-                - name: de-5gs-url
+                - name: de5gsurl
                   data-type: STRING
                   value: '192.168.3.3'
-                - name: service-registry-url
+                - name: serviceregistryurl
                   data-type: STRING
                   value: '192.168.3.5'
-                - name: polling-time
+                - name: pollingtime
                   data-type: INTEGER
                   value: 10000
-                - name: keep-alive-time
+                - name: keepalivetime
                   data-type: INTEGER
                   value: 10000
                 - name: address
@@ -68,7 +71,7 @@ vnfd:
                 - name: port
                   data-type: STRING
                   value: '8080'
-                - name: log-level
+                - name: loglevel
                   data-type: STRING
                   value: 'info'
               - name: startdashjs 
@@ -76,14 +79,17 @@ vnfd:
                 seq: 5                
   ext-cpd:
     - id: vnf-mgmt-ext
+      port-security-enabled: false
       int-cpd:
         cpd: eth0-int
         vdu-id: default_vdu
     - id: vnf-radioemulated-ext
+      port-security-enabled: false
       int-cpd:
         cpd: eth1-int
         vdu-id: default_vdu
     - id: vnf-digitalentity-ext
+      port-security-enabled: false
       int-cpd:
         cpd: eth2-int
         vdu-id: default_vdu
@@ -91,9 +97,9 @@ vnfd:
       int-cpd:
         cpd: eth3-int
         vdu-id: default_vdu        
-  id: ue_stuff
+  id: ue_stuff_vnfd
   mgmt-cp: vnf-mgmt-ext
-  product-name: ue_stuff
+  product-name: ue_stuff_vnfd
   sw-image-desc:
     - id: Ubuntu-20.04
       image: Ubuntu-20.04

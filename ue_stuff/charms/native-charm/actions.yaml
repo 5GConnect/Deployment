@@ -1,19 +1,23 @@
 configureue:
   description: configure ue
   params:
-    usim-imsi:
+    usimimsi:
       description: "USIM IMSI"
       type: string
-    usim-k:
+    usimk:
       description: "USIM K"
       type: string
-    usim-opc:
+    usimopc:
       description: "USIM OPC"
       type: string
+    gnbaddress:
+      description: "gNB address list"
+      type: string
   required:
-    - usim-imsi
-    - usim-k
-    - usim-opc
+    - usimimsi
+    - usimk
+    - usimopc
+    - gnbaddresses
 
 configureueproxy:
   description: configure ue proxy .env file
@@ -24,19 +28,19 @@ startue:
 startuede:
   description: start UE Digital Entity
   params:
-    physical-ue-proxy-url:
+    physicalueproxyurl:
       description: "PHYSICAL UE PROXY URL"
       type: string
-    de-5gs-url:
+    de5gsurl:
       description: "5GS ENTITY URL"
       type: string 
-    service-registry-url:
+    serviceregistryurl:
       description: "SERVICE REGISTRY URL"
       type: string      
-    polling-time: 
+    pollingtime:
       description: "POLLING TIME"
       type: integer  
-    keep-alive-time: 
+    keepalivetime:
       description: "KEEP-ALIVE TIME"
       type: integer  
     address: 
@@ -45,17 +49,17 @@ startuede:
     port:
       description: "SERVICE PORT"
       type: string
-    log-level:
+    loglevel:
       description: "LOG LEVEL"
       type: string
       default: "info"
   required:
-    - physical-ue-proxy-url
+    - physicalueproxyurl
     - port
-    - de-5gs-url
-    - service-registry-url
-    - polling-time
-    - keep-alive-time
+    - de5gsurl
+    - serviceregistryurl
+    - pollingtime
+    - keepalivetime
     - address
 
 startdashjs:

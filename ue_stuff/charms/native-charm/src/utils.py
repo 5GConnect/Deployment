@@ -3,8 +3,8 @@ from typing import List, NoReturn
 import apt
 import subprocess
 import yaml
+from jinja2 import Template
 
-processes = {}
 
 # Original source code of following functions:
 # https://github.com/charmed-osm/srs-enb-ue-operator/blob/master/src/utils.py
@@ -42,25 +42,26 @@ def shell(command: str) -> NoReturn:
 	subprocess.run(command, shell=True).check_returncode()
 
 
-def run_process(process_name: str, cmd: str, directory: str):
-	subprocess.run(f"cd {directory}", shell=True)
-	process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-	processes[process_name] = process
+def configure_service(command: str, service_template: str, service_path: str, working_directory: str = None,
+                      environment_variables: str = None):
+	with open(service_template, "r") as template:
+		render_parameters = {'command': command}
+		if working_directory:
+			render_parameters['directory'] = working_directory
+		if environment_variables:
+			render_parameters['environment'] = environment_variables
+		service_content = Template(template.read()).render(render_parameters)
+		with open(service_path, "w") as service:
+			service.write(service_content)
+		systemctl_daemon_reload()
 
 
-def edit_gnb_configuration_file(filepath: str, params):
-	with open(filepath) as f:
-		gnb_configuration = yaml.load(f, Loader=yaml.FullLoader)
+def systemctl_daemon_reload():
+	subprocess.run(["systemctl", "daemon-reload"]).check_returncode()
 
-	gnb_configuration['ngapIp'] = params['ngap-ip']
-	gnb_configuration['gtpIp'] = params['gtp-ip']
-	gnb_configuration['amfConfigs'][0]['address'] = params['amf-ip']
 
-	if 'amf-port' in params.keys() and params['amf-port'] != 38412:
-		gnb_configuration['amfConfigs'][0]['port'] = params['amf-port']
-
-	with open(filepath, 'w') as f:
-		yaml.dump(gnb_configuration, f)
+def systemctl(action: str, service_name: str) -> NoReturn:
+	subprocess.run(["systemctl", action, service_name]).check_returncode()
 
 
 def edit_ue_configuration_file(filepath: str, params):
@@ -70,6 +71,7 @@ def edit_ue_configuration_file(filepath: str, params):
 	ue_configuration['supi'] = params['usim-imsi']
 	ue_configuration['key'] = params['usim-k']
 	ue_configuration['op'] = params['usim-opc']
+	ue_configuration['gnbSearchList'][0] = params['gnb-address']
 	ue_configuration['opType'] = 'OPC'
 
 	with open(filepath, 'w') as f:

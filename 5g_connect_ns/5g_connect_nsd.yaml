@@ -81,8 +81,8 @@ nsd:
                     virtual-link-profile-id: digitalentity_net    
                 -   constituent-cpd-id:
                     -   constituent-base-element-id: '5'
-                        constituent-cpd-id: vnf-fronthaul-ext
-                    virtual-link-profile-id: fronthaul_net                            
+                        constituent-cpd-id: vnf-radioemulated-ext
+                    virtual-link-profile-id: radioemulated_net
                 -   constituent-cpd-id:
                     -   constituent-base-element-id: '5'
                         constituent-cpd-id: vnf-birex-ext
@@ -107,5 +107,5 @@ nsd:
         - dashboard_vnfd
         - ran_vnfd
         - service_discovery_vnfd
-        - ue_stuff
+        - ue_stuff_vnfd
     

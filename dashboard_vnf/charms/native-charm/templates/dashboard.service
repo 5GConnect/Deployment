@@ -1,0 +1,15 @@
+[Unit]
+Description=Dashboard service
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+WorkingDirectory={{ directory }}
+Environment={{ environment }}
+ExecStart={{ command }}
+
+[Install]
+WantedBy=multi-user.target

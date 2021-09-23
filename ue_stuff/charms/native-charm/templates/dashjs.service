@@ -1,0 +1,14 @@
+[Unit]
+Description=Dash.js service
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+WorkingDirectory={{ directory }}
+ExecStart={{ command }}
+
+[Install]
+WantedBy=multi-user.target

@@ -3,8 +3,7 @@ from typing import List, NoReturn
 import apt
 import subprocess
 import yaml
-
-processes = {}
+from jinja2 import Template
 
 # Original source code of following functions:
 # https://github.com/charmed-osm/srs-enb-ue-operator/blob/master/src/utils.py
@@ -42,42 +41,33 @@ def shell(command: str) -> NoReturn:
 	subprocess.run(command, shell=True).check_returncode()
 
 
-def run_process(process_name: str, cmd: str, directory: str):
-	subprocess.run(f"cd {directory}", shell=True)
-	process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-	processes[process_name] = process
+def configure_service(command: str, service_template: str, service_path: str):
+	with open(service_template, "r") as template:
+		service_content = Template(template.read()).render(command=command)
+		with open(service_path, "w") as service:
+			service.write(service_content)
+		systemctl_daemon_reload()
+
+
+def systemctl_daemon_reload():
+	subprocess.run(["systemctl", "daemon-reload"]).check_returncode()
+
+
+def systemctl(action: str, service_name: str) -> NoReturn:
+	subprocess.run(["systemctl", action, service_name]).check_returncode()
 
 
 def edit_gnb_configuration_file(filepath: str, params):
 	with open(filepath) as f:
 		gnb_configuration = yaml.load(f, Loader=yaml.FullLoader)
 
-	gnb_configuration['ngapIp'] = params['ngap-ip']
-	gnb_configuration['gtpIp'] = params['gtp-ip']
-	gnb_configuration['amfConfigs'][0]['address'] = params['amf-ip']
-	gnb_configuration['linkIp'] = params['link-ip']
+	gnb_configuration['ngapIp'] = params['ngapip']
+	gnb_configuration['gtpIp'] = params['gtpip']
+	gnb_configuration['amfConfigs'][0]['address'] = params['amfip']
+	gnb_configuration['linkIp'] = params['linkip']
 
-	if 'amf-port' in params.keys() and params['amf-port'] != 38412:
-		gnb_configuration['amfConfigs'][0]['port'] = params['amf-port']
+	if 'amfport' in params.keys() and params['amfport'] != 38412:
+		gnb_configuration['amfConfigs'][0]['port'] = params['amfport']
 
 	with open(filepath, 'w') as f:
 		yaml.dump(gnb_configuration, f)
-
-
-def edit_ue_configuration_file(filepath: str, params):
-	with open(filepath) as f:
-		ue_configuration = yaml.load(f, Loader=yaml.FullLoader)
-
-	ue_configuration['supi'] = params['usim-imsi']
-	ue_configuration['key'] = params['usim-k']
-	ue_configuration['op'] = params['usim-opc']
-	ue_configuration['opType'] = 'OPC'
-
-	with open(filepath, 'w') as f:
-		yaml.dump(ue_configuration, f)
-
-
-def edit_env_file(filepath, params):
-	with open(filepath, "w") as f:
-		for key, value in params.items():
-			f.write(f"{key}={value}\n")

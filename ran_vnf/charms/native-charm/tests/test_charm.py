@@ -13,6 +13,7 @@ from ops.testing import Harness
 
 GNB_CONFIG_FILE = f"{pathlib.Path(__file__).parent.parent.absolute()}/tests/mocked_config_files/open5gs-gnb.yaml"
 
+
 def write_yaml_file(filename, content):
 	with open(filename, 'w') as file:
 		yaml.dump(
@@ -32,7 +33,6 @@ def get_file_content(filename):
 
 def files_cleanup():
 	open(GNB_CONFIG_FILE, 'w').close()
-	open(UE_CONFIG_FILE, 'w').close()
 
 
 class TestCharm(unittest.TestCase):
@@ -47,8 +47,8 @@ class TestCharm(unittest.TestCase):
 	# open(ENV_FILE, 'w').close()
 
 	def test_gnb_basic_config(self):
-		content = {'ngapIp': "127.0.0.1", 'gtpIp': "127.0.0.1", 'amfConfigs': [{'address': "127.0.0.5", 'port': 38412}]}
-		action_event = Mock(params={"ngap-ip": "192.168.1.1", "gtp-ip": "192.168.1.1", "amf-ip": "192.168.1.1"})
+		content = {'ngapIp': "127.0.0.1", 'gtpIp': "127.0.0.1", 'linkIp': "127.0.0.1", 'amfConfigs': [{'address': "127.0.0.5", 'port': 38412}]}
+		action_event = Mock(params={"ngapip": "192.168.1.1", 'linkIp': "192.168.1.1", "gtpip": "192.168.1.1", "amfip": "192.168.1.1"})
 		write_yaml_file(GNB_CONFIG_FILE, content)
 		self.harness.charm.configure_gnb(action_event)
 		self.assertTrue(action_event.set_results.called)
@@ -60,7 +60,7 @@ class TestCharm(unittest.TestCase):
 	def test_gnb_config_with_port(self):
 		content = {'ngapIp': "127.0.0.1", 'gtpIp': "127.0.0.1", 'amfConfigs': [{'address': "127.0.0.5", 'port': 38412}]}
 		action_event = Mock(
-			params={"ngap-ip": "192.168.1.1", "gtp-ip": "192.168.1.1", "amf-ip": "192.168.1.1", "amf-port": 23456})
+			params={"ngapip": "192.168.1.1", "gtpip": "192.168.1.1", "amfip": "192.168.1.1", "amfport": 23456})
 		write_yaml_file(GNB_CONFIG_FILE, content)
 		self.harness.charm.configure_gnb(action_event)
 		self.assertTrue(action_event.set_results.called)

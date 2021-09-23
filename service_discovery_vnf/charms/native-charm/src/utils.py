@@ -2,9 +2,7 @@ from typing import List, NoReturn
 
 import apt
 import subprocess
-
-processes = {}
-
+from jinja2 import Template
 
 # Original source code of following functions:
 # https://github.com/charmed-osm/srs-enb-ue-operator/blob/master/src/utils.py
@@ -38,11 +36,23 @@ def git_clone(
 	subprocess.run(command).check_returncode()
 
 
-def run_process(process_name: str, cmd: str, directory: str):
-	subprocess.run(f"cd {directory}", shell=True)
-	process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-	processes[process_name] = process
-
-
 def shell(command: str) -> NoReturn:
 	subprocess.run(command, shell=True).check_returncode()
+
+
+def configure_service(command: str, working_directory: str, environment_variables: str,
+                      service_template: str, service_path: str):
+	with open(service_template, "r") as template:
+		service_content = Template(template.read()).render(command=command, directory=working_directory,
+		                                                   environment=environment_variables)
+		with open(service_path, "w") as service:
+			service.write(service_content)
+		systemctl_daemon_reload()
+
+
+def systemctl_daemon_reload():
+	subprocess.run(["systemctl", "daemon-reload"]).check_returncode()
+
+
+def systemctl(action: str, service_name: str) -> NoReturn:
+	subprocess.run(["systemctl", action, service_name]).check_returncode()

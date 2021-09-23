@@ -9,15 +9,24 @@ from ops.model import ActiveStatus, MaintenanceStatus
 from utils import (
 	install_apt,
 	git_clone,
-	run_process, shell
+	configure_service,
+	shell,
+	systemctl
 )
 
 logger = logging.getLogger(__name__)
 
 APT_REQUIREMENTS = [
 	"git",
-	"nodejs"
+	"nodejs",
+	"npm",
+	"xfce4",
+	"xfce4-goodies",
+	"tightvncserver"
 ]
+SERVICE_NAME = "dashboard"
+DASHBOARD_SERVICE_PATH = f"/etc/systemd/system/{SERVICE_NAME}.service"
+DASHBOARD_SERVICE_TEMPLATE = f"./templates/{SERVICE_NAME}.service"
 
 DASHBOARD_REPO = "https://github.com/5GConnect/dashboard.git"
 SRC_PATH = "/home/ubuntu/dashboard"
@@ -38,19 +47,37 @@ class NativeCharmCharm(CharmBase):
 		install_apt(packages=APT_REQUIREMENTS, update=True)
 		if not os.path.exists(SRC_PATH):
 			os.makedirs(SRC_PATH)
+		self.unit.status = MaintenanceStatus("Configuring vnc server")
+		configuration_lines=["#!/bin/bash", "xrdb /home/ubuntu/.Xresources", "startxfce4 &"]
+		shell('mkdir -p /home/ubuntu/.vnc && touch /home/ubuntu/.vnc/xstartup')
+		for line in configuration_lines:
+			shell(f'echo "{line}" >> /home/ubuntu/.vnc/xstartup')
+		shell('touch /home/ubuntu/.vnc/passwd')
+		shell("echo demopaper123 | vncpasswd -f > /home/ubuntu/.vnc/passwd")
+		shell("chmod +x /home/ubuntu/.vnc/xstartup")
 		self.unit.status = MaintenanceStatus("Cloning Dashboard repo...")
 		git_clone(DASHBOARD_REPO, output_folder=SRC_PATH, branch="develop")
 		shell(f"cd {SRC_PATH} && npm install")
 		self.unit.status = ActiveStatus()
 
 	def on_start(self, _):
+		self.unit.status = MaintenanceStatus("Starting vnc server")
+		shell("vncserver -geometry 1920x1080")
 		self.unit.status = ActiveStatus()
 
 	def start_dashboard(self, event):
 		all_params = event.params
-		command = f"VUE_APP_DISCOVERY_SERVICE={all_params['discovery-service-url']} npm run build:prod && serve -s dist"
+		command = "npm run dev"
+		self.unit.status = MaintenanceStatus("Generating dashboard service...")
+		configure_service(command=command,
+		                  working_directory=SRC_PATH,
+		                  environment_variables=f"VUE_APP_DISCOVERY_SERVICE={all_params['discoveryserviceurl']} " \
+		                                        f"VUE_APP_DISCOVERY_5GS_DE={all_params['systemserviceurl']}",
+		                  service_template=DASHBOARD_SERVICE_TEMPLATE,
+		                  service_path=DASHBOARD_SERVICE_PATH)
 		self.unit.status = MaintenanceStatus("Starting system's dashboard")
-		run_process("dashboard", command, SRC_PATH)
+		systemctl(action="start", service_name=SERVICE_NAME)
+		self.unit.status = ActiveStatus()
 		event.set_results({"message": "System's dashboard start command executed"})
 
 
