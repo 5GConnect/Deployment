@@ -1,0 +1,23 @@
+{
+    vld: [{
+            name: digitalentity_net,
+            vnfd-connection-point-ref: [
+                {
+                    member-vnf-index-ref: "1",
+                    vnfd-connection-point-ref: vnf-digitalentity-ext,
+                    ip-address: "192.168.3.4"
+                }
+            ]
+        },
+        {
+            name: radioemulated_net,
+            vnfd-connection-point-ref: [
+                {
+                    member-vnf-index-ref: "1",
+                    vnfd-connection-point-ref: vnf-radioemulated-ext,
+                    ip-address: "192.168.4.4"
+                }
+            ]
+        }
+        ]
+}

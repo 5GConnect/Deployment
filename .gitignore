@@ -52,3 +52,21 @@ ue_stuff/charms/native-charm/hooks/
 ue_stuff/charms/native-charm/manifest.yaml
 
 ue_stuff/checksums.txt
+
+ue_stuff.tar.gz
+
+system_ns.tar.gz
+
+5gs_digital_entity_vnf.tar.gz
+
+dashboard_vnf.tar.gz
+
+ran_vnf.tar.gz
+
+service_discovery_vnf.tar.gz
+
+system_ns/checksums.txt
+
+ue_ns.tar.gz
+
+ue_ns/checksums.txt

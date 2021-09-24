@@ -1,0 +1,41 @@
+nsd:
+    nsd:
+    -   description: A NS composed by a UE VNF
+        designer: Daniele Rossi
+        df:
+        -   id: default-df
+            vnf-profile:
+            -   id: '1'
+                virtual-link-connectivity:
+                -   constituent-cpd-id:
+                    -   constituent-base-element-id: '1'
+                        constituent-cpd-id: vnf-mgmt-ext
+                    virtual-link-profile-id: mgmt_net
+                -   constituent-cpd-id:
+                    -   constituent-base-element-id: '1'
+                        constituent-cpd-id: vnf-digitalentity-ext
+                    virtual-link-profile-id: digitalentity_net
+                -   constituent-cpd-id:
+                    -   constituent-base-element-id: '1'
+                        constituent-cpd-id: vnf-radioemulated-ext
+                    virtual-link-profile-id: radioemulated_net
+                -   constituent-cpd-id:
+                    -   constituent-base-element-id: '1'
+                        constituent-cpd-id: vnf-birex-ext
+                    virtual-link-profile-id: birex_net
+                vnfd-id: ue_stuff_vnfd
+        id: ue_nsd
+        name: ue_nsd
+        version: '1.0'
+        virtual-link-desc:
+        -   id: mgmt_net
+            mgmt-network: 'true'
+            vim-network-name: mgmt
+        -   id: birex_net
+            vim-network-name: private_net_P329
+        -   id: radioemulated_net
+            vim-network-name: system-radioemulated_ne
+        -   id: digitalentity_net
+            vim-network-name: system-digitalentity_ne
+        vnfd-id:
+        - ue_stuff_vnfd

@@ -6,9 +6,9 @@ vnfd:
         - id: default-instantiation-level
           vdu-level:
             - number-of-instances: 1
-              vdu-id: default_vdu
+              vdu-id: 5gsde
       vdu-profile:
-        - id: default_vdu
+        - id: 5gsde
           min-number-of-instances: 1
       lcm-operations-configuration:
         operate-vnf-op-config:
@@ -17,7 +17,7 @@ vnfd:
                 ssh-access:
                   default-user: ubuntu
                   required: true
-              id: default_vdu
+              id: 5gsde
               execution-environment-list:
                 - id: env
                   juju:
@@ -42,26 +42,26 @@ vnfd:
       port-security-enabled: false
       int-cpd:
         cpd: eth0-int
-        vdu-id: default_vdu
+        vdu-id: 5gsde
     - id: vnf-userplane-ext
       port-security-enabled: false
       int-cpd:
         cpd: eth1-int
-        vdu-id: default_vdu
+        vdu-id: 5gsde
     - id: vnf-fronthaul-ext
       port-security-enabled: false
       int-cpd:
         cpd: eth2-int
-        vdu-id: default_vdu    
+        vdu-id: 5gsde    
     - id: vnf-digitalentity-ext
       port-security-enabled: false
       int-cpd:
         cpd: eth3-int
-        vdu-id: default_vdu  
+        vdu-id: 5gsde  
     - id: vnf-birex-ext
       int-cpd:
         cpd: eth4-int
-        vdu-id: default_vdu                        
+        vdu-id: 5gsde                        
   id: 5gs_digital_entity_vnfd
   mgmt-cp: vnf-mgmt-ext
   product-name: 5gs_digital_entity_vnfd
@@ -71,8 +71,8 @@ vnfd:
       name: O5GS
   vdu:
     - cloud-init-file: cloud-config
-      description: default_vdu
-      id: default_vdu
+      description: 5gsde
+      id: 5gsde
       int-cpd:
         - id: eth0-int
           virtual-network-interface-requirement:
@@ -99,20 +99,20 @@ vnfd:
             - name: eth4
               virtual-interface:
                 type: PARAVIRT                                
-      name: default_vdu
+      name: 5gsde
       supplemental-boot-data:
         boot-data-drive: true
       sw-image-desc: O5GS
-      virtual-compute-desc: default_vdu-compute
+      virtual-compute-desc: 5gsde-compute
       virtual-storage-desc:
-        - default_vdu-storage
+        - 5gsde-storage
   version: '1.0'
   virtual-compute-desc:
-    - id: default_vdu-compute
+    - id: 5gsde-compute
       virtual-cpu:
         num-virtual-cpu: 2
       virtual-memory:
         size: 4
   virtual-storage-desc:
-    - id: default_vdu-storage
+    - id: 5gsde-storage
       size-of-storage: 40
