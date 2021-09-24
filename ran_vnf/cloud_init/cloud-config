@@ -15,6 +15,3 @@ network:
     ens5:
       dhcp4: true
       set-name: ens5
-# packages:
-#   - python3-loguru
-#   - python3-yaml

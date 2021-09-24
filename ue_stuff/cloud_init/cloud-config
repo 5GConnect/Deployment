@@ -19,7 +19,5 @@ network:
       dhcp4: true
       set-name: ens6
 
-
-# packages:
-#   - python3-loguru
-#   - python3-yaml
+runcmd:
+  - systemctl start vncserver

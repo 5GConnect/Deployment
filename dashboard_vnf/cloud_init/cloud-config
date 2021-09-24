@@ -14,4 +14,6 @@ network:
       set-name: ens4
     ens5:
       dhcp4: true
-      set-name: ens5      
+      set-name: ens5
+runcmd:
+  - systemctl start vncserver

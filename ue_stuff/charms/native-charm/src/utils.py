@@ -68,10 +68,10 @@ def edit_ue_configuration_file(filepath: str, params):
 	with open(filepath) as f:
 		ue_configuration = yaml.load(f, Loader=yaml.FullLoader)
 
-	ue_configuration['supi'] = params['usim-imsi']
-	ue_configuration['key'] = params['usim-k']
-	ue_configuration['op'] = params['usim-opc']
-	ue_configuration['gnbSearchList'][0] = params['gnb-address']
+	ue_configuration['supi'] = params['usimimsi']
+	ue_configuration['key'] = params['usimk']
+	ue_configuration['op'] = params['usimopc']
+	ue_configuration['gnbSearchList'][0] = params['gnbaddress']
 	ue_configuration['opType'] = 'OPC'
 
 	with open(filepath, 'w') as f:

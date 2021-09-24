@@ -19,10 +19,7 @@ logger = logging.getLogger(__name__)
 APT_REQUIREMENTS = [
     "git",
     "nodejs",
-    "npm",
-    "xfce4",
-    "xfce4-goodies",
-    "tightvncserver"
+    "npm"
 ]
 SERVICE_NAME = "dashboard"
 DASHBOARD_SERVICE_PATH = f"/etc/systemd/system/{SERVICE_NAME}.service"
@@ -50,20 +47,9 @@ class NativeCharmCharm(CharmBase):
         self.unit.status = MaintenanceStatus("Cloning Dashboard repo...")
         git_clone(DASHBOARD_REPO, output_folder=SRC_PATH, branch="develop")
         shell(f"cd {SRC_PATH} && npm install")
-        self.unit.status = MaintenanceStatus("Configuring vnc server")
-        shell('mkdir -p /home/ubuntu/.vnc && touch /home/ubuntu/.vnc/xstartup')
-        with open('./templates/xstartup', mode='r') as in_file, \
-                open('/home/ubuntu/.vnc/xstartup', mode='w') as out_file:
-            for line in in_file:
-                out_file.write(f"{line}\n")
-        shell('touch /home/ubuntu/.vnc/passwd')
-        shell("echo demopaper123 | vncpasswd -f > /home/ubuntu/.vnc/passwd")
-        shell("chmod +x /home/ubuntu/.vnc/xstartup")
         self.unit.status = ActiveStatus()
 
     def on_start(self, _):
-        self.unit.status = MaintenanceStatus("Starting vnc server")
-        shell("vncserver -geometry 1920x1080")
         self.unit.status = ActiveStatus()
 
     def start_dashboard(self, event):

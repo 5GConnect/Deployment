@@ -1,6 +1,6 @@
 nsd:
     nsd:
-    -   description: A NS composed by a single VNF
+    -   description: A NS composed by ran, 5g system and 5g digital entity, node discovery and dashboard VNF
         designer: Daniele Rossi
         df:
         -   id: default-df
@@ -68,28 +68,9 @@ nsd:
                     -   constituent-base-element-id: '4'
                         constituent-cpd-id: vnf-digitalentity-ext
                     virtual-link-profile-id: digitalentity_net                                                         
-                vnfd-id: service_discovery_vnfd    
-            -   id: '5'
-                virtual-link-connectivity:
-                -   constituent-cpd-id:
-                    -   constituent-base-element-id: '5'
-                        constituent-cpd-id: vnf-mgmt-ext
-                    virtual-link-profile-id: mgmt_net
-                -   constituent-cpd-id:
-                    -   constituent-base-element-id: '5'
-                        constituent-cpd-id: vnf-digitalentity-ext
-                    virtual-link-profile-id: digitalentity_net    
-                -   constituent-cpd-id:
-                    -   constituent-base-element-id: '5'
-                        constituent-cpd-id: vnf-radioemulated-ext
-                    virtual-link-profile-id: radioemulated_net
-                -   constituent-cpd-id:
-                    -   constituent-base-element-id: '5'
-                        constituent-cpd-id: vnf-birex-ext
-                    virtual-link-profile-id: birex_net        
-                vnfd-id: ue_stuff                                                                        
-        id: fiveg_connect_nsd
-        name: fiveg_connect_nsd
+                vnfd-id: service_discovery_vnfd
+        id: system_nsd
+        name: system_nsd
         version: '1.0'
         virtual-link-desc:
         -   id: mgmt_net
@@ -107,5 +88,4 @@ nsd:
         - dashboard_vnfd
         - ran_vnfd
         - service_discovery_vnfd
-        - ue_stuff_vnfd
     

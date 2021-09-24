@@ -17,10 +17,7 @@ configureue:
     - usimimsi
     - usimk
     - usimopc
-    - gnbaddresses
-
-configureueproxy:
-  description: configure ue proxy .env file
+    - gnbaddress
 
 startue:
   description: start ue

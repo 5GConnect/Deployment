@@ -47,7 +47,7 @@ vnfd:
       port-security-enabled: false
       int-cpd:
         cpd: eth1-int
-        vdu-id: default_vd
+        vdu-id: default_vdu
     - id: vnf-birex-ext
       int-cpd:
         cpd: eth2-int

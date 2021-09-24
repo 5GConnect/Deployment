@@ -40,15 +40,12 @@ vnfd:
                 - name: gnbaddress
                   data-type: STRING
                   value: '192.168.4.3'
-              - name: configureueproxy
-                execution-environment-ref: env
-                seq: 2
               - name: startue 
                 execution-environment-ref: env
-                seq: 3
+                seq: 2
               - name: startuede 
                 execution-environment-ref: env
-                seq: 4
+                seq: 3
                 parameter:
                 - name: physicalueproxyurl
                   data-type: STRING
@@ -76,7 +73,7 @@ vnfd:
                   value: 'info'
               - name: startdashjs 
                 execution-environment-ref: env
-                seq: 5                
+                seq: 4
   ext-cpd:
     - id: vnf-mgmt-ext
       port-security-enabled: false
@@ -102,7 +99,7 @@ vnfd:
   product-name: ue_stuff_vnfd
   sw-image-desc:
     - id: Ubuntu-20.04
-      image: Ubuntu-20.04
+      image: Ubuntu-20
       name: Ubuntu-20.04
   vdu:
     - cloud-init-file: cloud-config
