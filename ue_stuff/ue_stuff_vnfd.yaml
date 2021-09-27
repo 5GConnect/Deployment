@@ -49,13 +49,13 @@ vnfd:
                 parameter:
                 - name: physicalueproxyurl
                   data-type: STRING
-                  value: '127.0.0.1'
+                  value: 'http://127.0.0.1:8082'
                 - name: de5gsurl
                   data-type: STRING
-                  value: '192.168.3.3'
+                  value: 'http://192.168.3.3:8080'
                 - name: serviceregistryurl
                   data-type: STRING
-                  value: '192.168.3.5'
+                  value: 'http://192.168.3.5:8085'
                 - name: pollingtime
                   data-type: INTEGER
                   value: 10000

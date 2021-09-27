@@ -32,6 +32,7 @@ APT_REQUIREMENTS = [
     "iproute2",
     "npm",
     "python3-pip",
+    "net-tools"
 ]
 
 DASHJS_REPO = "https://github.com/5GConnect/dash.js"
