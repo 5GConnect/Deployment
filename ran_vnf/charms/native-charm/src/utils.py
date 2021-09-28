@@ -57,17 +57,8 @@ def systemctl(action: str, service_name: str) -> NoReturn:
 	subprocess.run(["systemctl", action, service_name]).check_returncode()
 
 
-def edit_gnb_configuration_file(filepath: str, params):
-	with open(filepath) as f:
-		gnb_configuration = yaml.load(f, Loader=yaml.FullLoader)
-
-	gnb_configuration['ngapIp'] = params['ngapip']
-	gnb_configuration['gtpIp'] = params['gtpip']
-	gnb_configuration['amfConfigs'][0]['address'] = params['amfip']
-	gnb_configuration['linkIp'] = params['linkip']
-
-	if 'amfport' in params.keys() and params['amfport'] != 38412:
-		gnb_configuration['amfConfigs'][0]['port'] = params['amfport']
-
-	with open(filepath, 'w') as f:
-		yaml.dump(gnb_configuration, f)
+def edit_gnb_configuration_file(service_template: str, filepath: str, params):
+	with open(service_template, "r") as template:
+		service_content = Template(template.read()).render(params)
+		with open(filepath, "w") as service:
+			service.write(service_content)

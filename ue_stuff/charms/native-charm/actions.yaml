@@ -10,14 +10,14 @@ configureue:
     usimopc:
       description: "USIM OPC"
       type: string
-    gnbaddress:
+    gnbaddresses:
       description: "gNB address list"
       type: string
   required:
     - usimimsi
     - usimk
     - usimopc
-    - gnbaddress
+    - gnbaddresses
 
 startue:
   description: start ue
@@ -45,7 +45,7 @@ startuede:
       type: string         
     port:
       description: "SERVICE PORT"
-      type: string
+      type: integer
     loglevel:
       description: "LOG LEVEL"
       type: string

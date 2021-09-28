@@ -2,9 +2,7 @@ from typing import List, NoReturn
 
 import apt
 import subprocess
-import yaml
 from jinja2 import Template
-import ruamel
 
 
 # Original source code of following functions:
@@ -65,21 +63,14 @@ def systemctl(action: str, service_name: str) -> NoReturn:
     subprocess.run(["systemctl", action, service_name]).check_returncode()
 
 
-def edit_ue_configuration_file(filepath: str, params):
-    with open(filepath) as f:
-        ue_configuration = yaml.load(f, Loader=yaml.FullLoader)
-
-    ruamel_yaml = ruamel.yaml.YAML()
-    ruamel_yaml.preserve_quotes = True
-
-    ue_configuration['supi'] = ruamel_yaml.load(f"'{params['usimimsi']}'")
-    ue_configuration['key'] = ruamel_yaml.load(f"'{params['usimk']}'")
-    ue_configuration['op'] = ruamel_yaml.load(f"'{params['usimopc']}'")
-    ue_configuration['gnbSearchList'][0] = ruamel_yaml.load(f"'{params['gnbaddress']}'")
-    ue_configuration['opType'] = ruamel_yaml.load(f"'OPC'")
-
-    with open(filepath, 'w') as f:
-        ruamel_yaml.dump(ue_configuration, f)
+def edit_ue_configuration_file(service_template: str, filepath: str, params):
+    gnb_addresses_list = list()
+    gnb_addresses_list.append(params['gnbaddresses'])
+    params['gnbaddresses'] = gnb_addresses_list
+    with open(service_template, "r") as template:
+        service_content = Template(template.read()).render(params)
+        with open(filepath, "w") as service:
+            service.write(service_content)
 
 
 def edit_env_file(filepath, params):

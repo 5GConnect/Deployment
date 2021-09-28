@@ -2,7 +2,6 @@
 
 import logging
 import os
-import pathlib
 
 from ops.charm import CharmBase
 from ops.model import (
@@ -16,7 +15,7 @@ from utils import (
     git_clone,
     shell,
     edit_ue_configuration_file,
-    edit_env_file, systemctl, configure_service,
+    systemctl, configure_service,
 )
 
 logger = logging.getLogger(__name__)
@@ -24,12 +23,6 @@ logger = logging.getLogger(__name__)
 APT_REQUIREMENTS = [
     "git",
     "nodejs",
-    "make",
-    "gcc",
-    "g++",
-    "libsctp-dev",
-    "lksctp-tools",
-    "iproute2",
     "npm",
     "python3-pip",
     "net-tools"
@@ -38,6 +31,7 @@ APT_REQUIREMENTS = [
 DASHJS_REPO = "https://github.com/5GConnect/dash.js"
 UE_SMART_ENTITIES_REPO = "https://github.com/5GConnect/UEDigitalEntity.git"
 UERANSIM_REPO = "https://github.com/DendoD96/UERANSIM.git"
+UERANSIM_SERVICE_TEMPLATE = f"./templates/open5gs-ue.yaml"
 
 SRC_PATH_DASH = "/home/ubuntu/dash.js"
 SRC_PATH_UERANSIM = "/home/ubuntu/UERANSIM"
@@ -80,10 +74,6 @@ class NativeCharmCharm(CharmBase):
             os.makedirs(SRC_PATH_UERANSIM)
         if not os.path.exists(SRC_PATH_UE_SMART_ENTITIES):
             os.makedirs(SRC_PATH_UE_SMART_ENTITIES)
-        self.unit.status = MaintenanceStatus("Cloning UERANSIM repo...")
-        git_clone(UERANSIM_REPO, output_folder=SRC_PATH_UERANSIM, branch="paper_demo")
-        self.unit.status = MaintenanceStatus("Buildig UERANSIM...")
-        shell(f"cd {SRC_PATH_UERANSIM} && make")
         self.unit.status = MaintenanceStatus("Cloning UE Digital Entity repo...")
         git_clone(UE_SMART_ENTITIES_REPO, output_folder=SRC_PATH_UE_SMART_ENTITIES, branch="develop")
         shell(f"cd {SRC_PATH_UE_SMART_ENTITIES}/backend && npm install")
@@ -99,7 +89,7 @@ class NativeCharmCharm(CharmBase):
     def configure_ue(self, event):
         try:
             filepath = f"{SRC_PATH_UERANSIM}/config/open5gs-ue.yaml"
-            edit_ue_configuration_file(filepath, event.params)
+            edit_ue_configuration_file(UERANSIM_SERVICE_TEMPLATE, filepath, event.params)
             self.unit.status = ActiveStatus()
             event.set_results({"message": "UE configuration file edited"})
         except Exception as e:

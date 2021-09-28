@@ -37,7 +37,7 @@ vnfd:
                 - name: usimopc
                   data-type: STRING
                   value: 'E8ED289DEBA952E4283B54E88E6183CA'
-                - name: gnbaddress
+                - name: gnbaddresses
                   data-type: STRING
                   value: '192.168.4.3'
               - name: startue 
@@ -66,8 +66,8 @@ vnfd:
                   data-type: STRING
                   value: '192.168.3.4'
                 - name: port
-                  data-type: STRING
-                  value: '8080'
+                  data-type: INTEGER
+                  value: 8080
                 - name: loglevel
                   data-type: STRING
                   value: 'info'
@@ -98,9 +98,9 @@ vnfd:
   mgmt-cp: vnf-mgmt-ext
   product-name: ue_stuff_vnfd
   sw-image-desc:
-    - id: Ubuntu-20.04
-      image: Ubuntu-20
-      name: Ubuntu-20.04
+    - id: ueransim
+      image: ueransim
+      name: ueransim
   vdu:
     - cloud-init-file: cloud-config
       description: uestuff
@@ -129,7 +129,7 @@ vnfd:
       name: uestuff
       supplemental-boot-data:
         boot-data-drive: true
-      sw-image-desc: Ubuntu-20.04
+      sw-image-desc: ueransim
       virtual-compute-desc: uestuff-compute
       virtual-storage-desc:
         - uestuff-storage

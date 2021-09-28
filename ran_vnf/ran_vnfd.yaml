@@ -63,9 +63,9 @@ vnfd:
   mgmt-cp: vnf-mgmt-ext
   product-name: ran_vnfd
   sw-image-desc:
-    - id: Ubuntu-20.04
-      image: Ubuntu-20.04
-      name: Ubuntu-20.04
+    - id: ueransim
+      image: ueransim
+      name: ueransim
   vdu:
     - cloud-init-file: cloud-config
       description: ran
@@ -89,7 +89,7 @@ vnfd:
       name: ran
       supplemental-boot-data:
         boot-data-drive: true
-      sw-image-desc: Ubuntu-20.04
+      sw-image-desc: ueransim
       virtual-compute-desc: ran-compute
       virtual-storage-desc:
         - ran-storage
