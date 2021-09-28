@@ -10,7 +10,7 @@ key: '{{ usimk }}'
 # Operator code (OP or OPC) of the UE
 op: '{{ usimopc }}'
 # This value specifies the OP type and it can be either 'OP' or 'OPC'
-opType: '{{ opType }}'
+opType: 'OPC'
 # Authentication Management Field (AMF) value
 amf: '8000'
 # IMEI number of the device. It is used if no SUPI is provided

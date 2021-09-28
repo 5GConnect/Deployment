@@ -16,11 +16,6 @@ from utils import (
 
 logger = logging.getLogger(__name__)
 
-APT_REQUIREMENTS = [
-    "git",
-    "nodejs",
-    "npm"
-]
 SERVICE_NAME = "dashboard"
 DASHBOARD_SERVICE_PATH = f"/etc/systemd/system/{SERVICE_NAME}.service"
 DASHBOARD_SERVICE_TEMPLATE = f"./templates/{SERVICE_NAME}.service"
@@ -40,8 +35,6 @@ class NativeCharmCharm(CharmBase):
         self.framework.observe(self.on.startdashboard_action, self.start_dashboard)
 
     def on_install(self, _):
-        self.unit.status = MaintenanceStatus("Installing apt packages")
-        install_apt(packages=APT_REQUIREMENTS, update=True)
         if not os.path.exists(SRC_PATH):
             os.makedirs(SRC_PATH)
         self.unit.status = MaintenanceStatus("Cloning Dashboard repo...")
