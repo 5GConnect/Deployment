@@ -13,7 +13,7 @@ for path in ./*/; do
             echo "charmcraft build failed. The charm source code may not be present!"
         fi
         cd ../../..
-        osm package-build $dirname
     fi
+    osm package-build $dirname
 done
 

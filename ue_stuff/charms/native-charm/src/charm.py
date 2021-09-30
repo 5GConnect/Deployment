@@ -22,8 +22,6 @@ logger = logging.getLogger(__name__)
 
 APT_REQUIREMENTS = [
     "git",
-    "nodejs",
-    "npm",
     "python3-pip",
     "net-tools"
 ]

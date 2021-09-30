@@ -30,13 +30,13 @@ vnfd:
                 parameter:
                 - name: usimimsi
                   data-type: STRING
-                  value: 'imsi-901700000000001'
+                  value: <usim_imsi>
                 - name: usimk
                   data-type: STRING
-                  value: '465B5CE8B199B49FAA5F0A2EE238A6BC'
+                  value: <usim_key>
                 - name: usimopc
                   data-type: STRING
-                  value: 'E8ED289DEBA952E4283B54E88E6183CA'
+                  value: <usim_opc>
                 - name: gnbaddresses
                   data-type: STRING
                   value: '192.168.4.3'

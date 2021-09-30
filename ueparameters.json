@@ -20,4 +20,8 @@
             ]
         }
         ]
+    additionalParamsForVnf: [{
+            member-vnf-index: "1",
+            additionalParams: {usim_imsi: imsi-901700000000001,  usim_key: 465B5CE8B199B49FAA5F0A2EE238A6BC, usim_opc: E8ED289DEBA952E4283B54E88E6183CA}
+    }]
 }
