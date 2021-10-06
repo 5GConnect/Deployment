@@ -1,5 +1,5 @@
 [Unit]
-Description=Dash.js service
+Description=Rx player service
 After=network.target
 StartLimitIntervalSec=0
 [Service]

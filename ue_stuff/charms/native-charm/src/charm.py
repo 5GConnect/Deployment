@@ -26,12 +26,12 @@ APT_REQUIREMENTS = [
     "net-tools"
 ]
 
-DASHJS_REPO = "https://github.com/5GConnect/dash.js"
+RX_REPO = "https://github.com/canalplus/rx-player.git"
 UE_SMART_ENTITIES_REPO = "https://github.com/5GConnect/UEDigitalEntity.git"
 UERANSIM_REPO = "https://github.com/DendoD96/UERANSIM.git"
 UERANSIM_SERVICE_TEMPLATE = f"./templates/open5gs-ue.yaml"
 
-SRC_PATH_DASH = "/home/ubuntu/dash.js"
+SRC_PATH_RX = "/home/ubuntu/rxplayer"
 SRC_PATH_UERANSIM = "/home/ubuntu/UERANSIM"
 SRC_PATH_UE_SMART_ENTITIES = "/home/ubuntu/UEDigitalEntity"
 
@@ -43,9 +43,9 @@ UE_SMART_ENTITIES_SERVICE_NAME = "uedigitalentity"
 UE_SMART_ENTITIES_SERVICE_PATH = f"/etc/systemd/system/{UE_SMART_ENTITIES_SERVICE_NAME}.service"
 UE_SMART_ENTITIES_TEMPLATE = f"./templates/{UE_SMART_ENTITIES_SERVICE_NAME}.service"
 
-DASHJS_SERVICE_NAME = "dashjs"
-DASHJS_SERVICE_PATH = f"/etc/systemd/system/{DASHJS_SERVICE_NAME}.service"
-DASHJS_SERVICE_TEMPLATE = f"./templates/{DASHJS_SERVICE_NAME}.service"
+RX_SERVICE_NAME = "rx"
+RX_SERVICE_PATH = f"/etc/systemd/system/{RX_SERVICE_NAME}.service"
+RX_SERVICE_TEMPLATE = f"./templates/{RX_SERVICE_NAME}.service"
 
 
 class NativeCharmCharm(CharmBase):
@@ -60,14 +60,14 @@ class NativeCharmCharm(CharmBase):
         self.framework.observe(self.on.configureue_action, self.configure_ue)
         self.framework.observe(self.on.startue_action, self.start_ue)
         self.framework.observe(self.on.startuede_action, self.start_uede)
-        self.framework.observe(self.on.startdashjs_action, self.start_dashjs)
+        self.framework.observe(self.on.startrx_action, self.start_rx)
 
     def on_install(self, _):
         self.unit.status = MaintenanceStatus("Installing apt packages")
         install_apt(packages=APT_REQUIREMENTS, update=True)
         shell("sudo snap install cmake --classic")
-        if not os.path.exists(SRC_PATH_DASH):
-            os.makedirs(SRC_PATH_DASH)
+        if not os.path.exists(SRC_PATH_RX):
+            os.makedirs(SRC_PATH_RX)
         if not os.path.exists(SRC_PATH_UERANSIM):
             os.makedirs(SRC_PATH_UERANSIM)
         if not os.path.exists(SRC_PATH_UE_SMART_ENTITIES):
@@ -76,9 +76,9 @@ class NativeCharmCharm(CharmBase):
         git_clone(UE_SMART_ENTITIES_REPO, output_folder=SRC_PATH_UE_SMART_ENTITIES, branch="develop")
         shell(f"cd {SRC_PATH_UE_SMART_ENTITIES}/backend && npm install")
         shell(f"cd {SRC_PATH_UE_SMART_ENTITIES}/physical_ue_proxy && pip install -r requirements.txt")
-        self.unit.status = MaintenanceStatus("Cloning Dash js repo...")
-        git_clone(DASHJS_REPO, output_folder=SRC_PATH_DASH, branch="development")
-        shell(f"cd {SRC_PATH_DASH} && npm install")
+        self.unit.status = MaintenanceStatus("Cloning RX player repo...")
+        git_clone(RX_REPO, output_folder=SRC_PATH_RX, branch="master")
+        shell(f"cd {SRC_PATH_RX} && npm install && npm run build")
         self.unit.status = ActiveStatus()
 
     def on_start(self, _):
@@ -129,17 +129,17 @@ class NativeCharmCharm(CharmBase):
         self.unit.status = ActiveStatus()
         event.set_results({"message": "UE Digital Entity start command executed"})
 
-    def start_dashjs(self, event):
+    def start_rx(self, event):
         command = "npm run start"
-        self.unit.status = MaintenanceStatus("Generating Dash.js service...")
+        self.unit.status = MaintenanceStatus("Generating Rx player service...")
         configure_service(command=command,
-                          working_directory=SRC_PATH_DASH,
-                          service_template=DASHJS_SERVICE_TEMPLATE,
-                          service_path=DASHJS_SERVICE_PATH)
-        self.unit.status = MaintenanceStatus("Starting Dash.js")
-        systemctl(action="start", service_name=DASHJS_SERVICE_NAME)
+                          working_directory=SRC_PATH_RX,
+                          service_template=RX_SERVICE_TEMPLATE,
+                          service_path=RX_SERVICE_PATH)
+        self.unit.status = MaintenanceStatus("Starting Rx player")
+        systemctl(action="start", service_name=RX_SERVICE_NAME)
         self.unit.status = ActiveStatus()
-        event.set_results({"message": "Dashjs start command executed"})
+        event.set_results({"message": "Rx player start command executed"})
 
 
 if __name__ == "__main__":

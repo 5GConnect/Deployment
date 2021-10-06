@@ -18,6 +18,3 @@ network:
     ens6:
       dhcp4: true
       set-name: ens6
-
-runcmd:
-  - systemctl start vncserver

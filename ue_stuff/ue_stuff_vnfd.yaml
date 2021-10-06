@@ -71,7 +71,7 @@ vnfd:
                 - name: loglevel
                   data-type: STRING
                   value: 'info'
-              - name: startdashjs 
+              - name: startrx 
                 execution-environment-ref: env
                 seq: 4
   ext-cpd:
